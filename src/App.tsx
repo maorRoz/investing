@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { InstrumentsList } from './InstrumentsList/InstrumentsList';
 import { Instrument } from './types/Instrument';
@@ -8,8 +8,11 @@ import {
   CREATE_INSTRUMENT
 } from './gql';
 import { AddInstrumentForm } from './AddInstrumentForm';
+import { InstrumentSearchBar } from './InstrumentsSearchBar/InstrumentSearchBar';
 
 export const App = () => {
+  const [searchInput, setSearchInput] = useState('');
+
   const {
     data: { instruments } = { instruments: [] },
     refetch: getAllInstrumentsRefetch
@@ -40,12 +43,28 @@ export const App = () => {
     [createInstrument, getAllInstrumentsRefetch]
   );
 
+  const filteredInstruments = useMemo(() => {
+    const searchInputLowercase = searchInput.toLowerCase();
+
+    return instruments.filter(({ name, symbol, instrumentType }) => {
+      const params = [name, symbol, instrumentType];
+      return params.some((param) =>
+        param.toLowerCase().includes(searchInputLowercase)
+      );
+    });
+  }, [searchInput, instruments]);
+
   return (
     <div style={{ display: 'flex' }}>
       <AddInstrumentForm addInstrument={handleCreateInstrument} />
       <div className='layout'>
+        <InstrumentSearchBar
+          style={{ marginBottom: '1em' }}
+          value={searchInput}
+          onChange={setSearchInput}
+        />
         <InstrumentsList
-          instruments={instruments}
+          instruments={filteredInstruments}
           removeInstrument={handleRemoveInstrument}
         />
       </div>
