@@ -1,0 +1,29 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Instrument {
+  instrumentId: Float!
+  name: String!
+  symbol: String!
+  instrumentType: String!
+}
+
+type Query {
+  instruments: [Instrument!]!
+}
+
+type Mutation {
+  createInstrument(instrumentInput: InstrumentInput!): Instrument!
+  removeInstrument(instrumentIdInput: InstrumentIdInput!): Int!
+}
+
+input InstrumentInput {
+  name: String!
+  symbol: String!
+  instrumentType: String!
+}
+
+input InstrumentIdInput {
+  instrumentId: Float!
+}
