@@ -1,22 +1,25 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import { Instrument } from '../types/Instrument';
-import { GET_ALL_INSTRUMENTS } from '../gql';
+
 import { InstrumentBox } from './InstrumentBox';
+import { InstrumentsListLayout } from './style';
 
-export const InstrumentsList = () => {
-  const {
-    data: instrumentsResponseData = { instruments: [] },
-    refetch: getAllInstrumentsRefetch
-  } = useQuery<{
-    instruments: Instrument[];
-  }>(GET_ALL_INSTRUMENTS);
-
-  return (
-    <>
-      {instrumentsResponseData.instruments.map((instrument, index) => (
-        <InstrumentBox key={index} instrument={instrument} />
-      ))}
-    </>
-  );
+export type InstrumentsListProps = {
+  instruments: Instrument[];
+  removeInstrument: (instrumentId: Instrument['instrumentId']) => void;
 };
+
+export const InstrumentsList = ({
+  instruments,
+  removeInstrument
+}: InstrumentsListProps) => (
+  <InstrumentsListLayout>
+    {instruments.map((instrument, index) => (
+      <InstrumentBox
+        key={index}
+        instrument={instrument}
+        removeInstrument={removeInstrument}
+      />
+    ))}
+  </InstrumentsListLayout>
+);

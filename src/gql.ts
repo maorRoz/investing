@@ -1,13 +1,19 @@
 import { gql } from 'apollo-boost';
 
 export const CREATE_INSTRUMENT = gql`
-  mutation CreateInstrument($InstrumentInput: InstrumentInput!) {
-    createInstrument(instrumentInput: $InstrumentInput) {
+  mutation CreateInstrument($instrumentInput: InstrumentInput!) {
+    createInstrument(instrumentInput: $instrumentInput) {
       instrumentId
       name
       symbol
       instrumentType
     }
+  }
+`;
+
+export const REMOVE_INSTRUMENT = gql`
+  mutation RemoveInstrument($instrumentId: Float!) {
+    removeInstrument(instrumentIdInput: { instrumentId: $instrumentId })
   }
 `;
 
